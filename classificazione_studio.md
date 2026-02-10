@@ -83,7 +83,7 @@ dove:
 - $z_i$ = valore standardizzato della feature per l'osservazione *i*
 - $x_i$ = valore originale della feature
 - $\mu$ = **media** di tutti i valori della feature nel dataset
-- $\sigma$ = **deviazione standard** di tutti i valori della feature nel dataset
+- $\sigma$ = **deviazione standard** (la radice quadrata della Varianza) di tutti i valori della feature nel dataset $\sigma = \sqrt{\frac{\sum (x_i - \mu)^2}{N}}$
 
 | Raggio medio (scaled) | Punti di concavità (scaled) | Diagnosi |
 |---|---|---|
@@ -178,7 +178,7 @@ dove:
 | Proprietà | Descrizione |
 |---|---|
 | **Range** | Output sempre tra 0 e 1 → interpretabile come probabilità |
-| **σ(0) = 0.5** | Quando z = 0, la probabilità è esattamente 50% |
+| **σ(0) = 0.5** | Quando z = 0,5 la probabilità è esattamente 50% |
 | **z → +∞ ⇒ σ(z) → 1** | Valori grandi di z danno probabilità vicine a 1 |
 | **z → −∞ ⇒ σ(z) → 0** | Valori molto negativi danno probabilità vicine a 0 |
 | **Derivabile ovunque** | Permette l'uso della discesa del gradiente |
