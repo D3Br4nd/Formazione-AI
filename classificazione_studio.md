@@ -218,6 +218,9 @@ dove:
 
 Come si addestra un modello di regressione logistica? **Minimizzando una funzione di costo** tramite un algoritmo di ottimizzazione iterativo (tipicamente la **discesa del gradiente**).
 
+> [!NOTE]
+> Qui consideriamo la Log Loss come **funzione obiettivo**: è lo strumento usato dal computer *durante l'addestramento* per aggiustare i pesi $W$. Vedremo nel capitolo 4.8 come usarla anche come **metrica di valutazione**.
+
 #### Step 1 — Likelihood (Verosimiglianza)
 
 La domanda fondamentale è: *qual è la probabilità di ottenere il target Y, avendo le feature X e i parametri W?*
@@ -382,6 +385,15 @@ dove:
 
 > [!WARNING]
 > All'aumentare del numero di classi, il numero di modelli nel OvO **cresce molto più velocemente** rispetto all'OvR. Per molte classi, OvR è generalmente preferibile.
+
+#### Nota Tecnica: Preparazione dei dati (One-Hot Encoding)
+Per gestire le classi in un problema multiclasse, spesso i dati vengono trasformati tramite **One-Hot Encoding**. Ogni classe diventa una colonna binaria (0 o 1).
+Esempio con 3 classi (🔴, 🟢, 🔵):
+- 🔴 → `[1, 0, 0]`
+- 🟢 → `[0, 1, 0]`
+- 🔵 → `[0, 0, 1]`
+
+Questo permette ai modelli OvR di isolare facilmente la classe "positiva" leggendo solo la colonna corrispondente.
 
 ---
 
@@ -573,7 +585,7 @@ $$\Large \text{Specificity} = \frac{45}{45 + 5} = \frac{45}{50} = 0.90 = 90\%$$
 
 #### La Curva ROC (Receiver Operating Characteristic)
 
-Ci permette di valutare le **performance del modello al variare del threshold**.
+La Curva ROC è la **rappresentazione grafica del trade-off della soglia** visto nel capitolo 4.1.1. Invece di guardare una sola matrice di confusione alla volta, la curva ROC mostra come variano le performance per **tutte le possibili soglie** (da 0 a 1).
 
 **Assi del grafico:**
 - **Asse Y**: Sensitivity (Recall) = TPR = TP / (TP + FN)
@@ -650,6 +662,11 @@ Se una delle due metriche è molto bassa, la media aritmetica potrebbe comunque 
 ### 4.8 Log Loss (Cross Entropy)
 
 La **Log Loss** è la funzione di costo della regressione logistica, ma viene usata anche come **metrica di valutazione**.
+
+> [!IMPORTANT]
+> **Qual è la differenza?**
+> - **Come Funzione di Costo (Cap 2.5)**: Viene passata all'ottimizzatore (es. Gradient Descent) per guidare l'apprendimento dei pesi. È il "motore" del training.
+> - **Come Metrica di Valutazione (Qui)**: Viene calcolata sui dati di test per confrontare modelli diversi. Rispetto all'Accuracy, premia i modelli che "azzaccano" la classe con alta probabilità (confidenza).
 
 $$\Large \text{LogLoss} = -\frac{1}{n} \sum_{i=1}^{n} \left[ y_i \cdot \log(\hat{y}_i) + (1 - y_i) \cdot \log(1 - \hat{y}_i) \right]$$
 
