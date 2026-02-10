@@ -178,7 +178,7 @@ dove:
 | Proprietà | Descrizione |
 |---|---|
 | **Range** | Output sempre tra 0 e 1 → interpretabile come probabilità |
-| **σ(0) = 0.5** | Quando z = 0,5 la probabilità è esattamente 50% |
+| **σ(0) = 0.5** | Quando z = 0 la probabilità è esattamente 50% |
 | **z → +∞ ⇒ σ(z) → 1** | Valori grandi di z danno probabilità vicine a 1 |
 | **z → −∞ ⇒ σ(z) → 0** | Valori molto negativi danno probabilità vicine a 0 |
 | **Derivabile ovunque** | Permette l'uso della discesa del gradiente |
@@ -443,6 +443,30 @@ Supponiamo un modello testato su 100 pazienti:
 > I **False Negative** (FN = 10) sono l'errore più pericoloso in campo medico: sono tumori maligni che il modello ha classificato come benigni. Un paziente potrebbe non ricevere il trattamento necessario.
 
 Useremo questi numeri per tutte le metriche che seguono.
+
+### 4.1.1 L'Impatto della Soglia (Threshold)
+
+La matrice di confusione sopra assume una soglia standard di **0.5**.
+Se cambiamo la soglia, i numeri nella matrice (TP, FP, FN, TN) cambiano drasticamente.
+
+#### Abbassare la soglia (es. da 0.5 a 0.2)
+Significa che il modello classifica come "Maligno" (1) molto più facilmente (basta che la probabilità sia > 20%).
+
+*   **FN (Falsi Negativi) ⬇️ Diminuiscono**: "Peschiamo" più tumori maligni. È meno probabile che un malato sia classificato come sano.
+*   **FP (Falsi Positivi) ⬆️ Aumentano**: Molti più tumori benigni verranno classificati come maligni (falsi allarmi).
+*   **Recall (Sensibilità) ⬆️ Aumenta**: Il modello è molto bravo a trovare tutti i positivi.
+*   **Precision ⬇️ Diminuisce**: Molte delle previsioni "maligno" saranno sbagliate.
+
+#### Alzare la soglia (es. da 0.5 a 0.8)
+Significa che il modello è "molto cauto" prima di dire che un tumore è maligno.
+
+*   **FN (Falsi Negativi) ⬆️ Aumentano**: Molti tumori reali verranno ignorati perché il modello non è "abbastanza sicuro".
+*   **FP (Falsi Positivi) ⬇️ Diminuiscono**: Pochi falsi allarmi.
+*   **Recall ⬇️ Diminuisce**: Perdiamo molti casi positivi.
+*   **Precision ⬆️ Aumenta**: Quando il modello dice "maligno", quasi sicuramente ha ragione.
+
+> [!IMPORTANT]
+> In campo medico, di solito si preferisce **abbassare la soglia**. Meglio fare un esame in più a un paziente sano (FP) che mandare a casa un paziente con un tumore non diagnosticato (FN).
 
 ---
 
