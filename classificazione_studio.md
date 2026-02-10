@@ -77,7 +77,7 @@ Prendiamo un esempio concreto dal corso: **classificare un tumore come maligno o
 
 Normalizziamo le feature con media 0 e deviazione standard 1 (StandardScaler):
 
-$$z_i = \frac{x_i - \mu}{\sigma}$$
+$$\Large z_i = \frac{x_i - \mu}{\sigma}$$
 
 | Raggio medio (scaled) | Punti di concavità (scaled) | Diagnosi |
 |---|---|---|
@@ -106,7 +106,7 @@ Il **Decision Boundary** (soglia di decisione) è la **retta** (o iperpiano, in 
 
 La regressione logistica parte dalla stessa equazione lineare della regressione:
 
-$$z = w_1 x_1 + w_2 x_2 + b$$
+$$\Large z = w_1 x_1 + w_2 x_2 + b$$
 
 dove:
 - `x₁, x₂` sono le feature (es. raggio medio, punti di concavità)
@@ -130,13 +130,13 @@ Supponiamo che dopo l'addestramento il modello abbia imparato:
 
 Per un tumore con raggio medio (scaled) = 1.097 e punti di concavità (scaled) = 2.532:
 
-$$z = 0.8 \times 1.097 + 1.2 \times 2.532 + (-0.5) = 0.878 + 3.038 - 0.5 = 3.416$$
+$$\Large z = 0.8 \times 1.097 + 1.2 \times 2.532 + (-0.5) = 0.878 + 3.038 - 0.5 = 3.416$$
 
 Dato che **z = 3.416 > 0** → il modello classifica come **maligno** ✓
 
 Per un tumore con raggio (scaled) = −1.313 e concavità (scaled) = −0.726:
 
-$$z = 0.8 \times (-1.313) + 1.2 \times (-0.726) + (-0.5) = -1.050 - 0.871 - 0.5 = -2.421$$
+$$\Large z = 0.8 \times (-1.313) + 1.2 \times (-0.726) + (-0.5) = -1.050 - 0.871 - 0.5 = -2.421$$
 
 Dato che **z = −2.421 < 0** → il modello classifica come **benigno** ✓
 
@@ -150,7 +150,7 @@ Nella classificazione, non ci basta il valore grezzo `z`. Vogliamo un **output d
 
 La funzione a gradino converte direttamente `z` in 0 o 1:
 
-$$\text{BinaryStep}(z) = \begin{cases} 1 & \text{se } z \geq 0 \\ 0 & \text{se } z < 0 \end{cases}$$
+$$\Large \text{BinaryStep}(z) = \begin{cases} 1 & \text{se } z \geq 0 \\ 0 & \text{se } z < 0 \end{cases}$$
 
 **Problema**: non fornisce una probabilità, solo una decisione secca. Non è derivabile in z = 0, quindi non possiamo usare il gradiente per ottimizzare i pesi.
 
@@ -160,7 +160,7 @@ $$\text{BinaryStep}(z) = \begin{cases} 1 & \text{se } z \geq 0 \\ 0 & \text{se }
 
 Qui entra in gioco la vera protagonista della regressione logistica: la **funzione sigmoide** (detta anche funzione logistica).
 
-$$\sigma(z) = \frac{1}{1 + e^{-z}}$$
+$$\Large \sigma(z) = \frac{1}{1 + e^{-z}}$$
 
 #### Proprietà fondamentali
 
@@ -177,13 +177,13 @@ $$\sigma(z) = \frac{1}{1 + e^{-z}}$$
 
 Riprendiamo l'esempio precedente con z = 3.416:
 
-$$\sigma(3.416) = \frac{1}{1 + e^{-3.416}} = \frac{1}{1 + 0.0327} = \frac{1}{1.0327} = 0.968$$
+$$\Large \sigma(3.416) = \frac{1}{1 + e^{-3.416}} = \frac{1}{1 + 0.0327} = \frac{1}{1.0327} = 0.968$$
 
 **Interpretazione**: il modello prevede una probabilità del **96.8%** che il tumore sia maligno.
 
 Ora con z = −2.421:
 
-$$\sigma(-2.421) = \frac{1}{1 + e^{2.421}} = \frac{1}{1 + 11.257} = \frac{1}{12.257} = 0.082$$
+$$\Large \sigma(-2.421) = \frac{1}{1 + e^{2.421}} = \frac{1}{1 + 11.257} = \frac{1}{12.257} = 0.082$$
 
 **Interpretazione**: probabilità dell'**8.2%** che sia maligno → quindi probabilità del **91.8%** che sia benigno.
 
@@ -191,7 +191,7 @@ $$\sigma(-2.421) = \frac{1}{1 + e^{2.421}} = \frac{1}{1 + 11.257} = \frac{1}{12.
 
 Di default il threshold è **0.5**:
 
-$$\hat{y} = \begin{cases} 1 \text{ (positivo)} & \text{se } \sigma(z) \geq 0.5 \\ 0 \text{ (negativo)} & \text{se } \sigma(z) < 0.5 \end{cases}$$
+$$\Large \hat{y} = \begin{cases} 1 \text{ (positivo)} & \text{se } \sigma(z) \geq 0.5 \\ 0 \text{ (negativo)} & \text{se } \sigma(z) < 0.5 \end{cases}$$
 
 > [!TIP]
 > Il threshold può essere modificato in base al contesto. In campo medico, potremmo abbassarlo a 0.3 per essere più conservativi: meglio un falso allarme che un tumore non diagnosticato.
@@ -208,7 +208,7 @@ La domanda fondamentale è: *qual è la probabilità di ottenere il target Y, av
 
 Per una singola osservazione, la likelihood è:
 
-$$P(y_i | x_i, W) = \hat{y}_i^{y_i} \cdot (1 - \hat{y}_i)^{(1 - y_i)}$$
+$$\Large P(y_i | x_i, W) = \hat{y}_i^{y_i} \cdot (1 - \hat{y}_i)^{(1 - y_i)}$$
 
 dove:
 - `ŷᵢ = σ(z)` è la probabilità prevista dal modello
@@ -223,13 +223,13 @@ dove:
 
 Per tutto il dataset (assumendo osservazioni indipendenti):
 
-$$L(W) = \prod_{i=1}^{n} P(y_i | x_i, W)$$
+$$\Large L(W) = \prod_{i=1}^{n} P(y_i | x_i, W)$$
 
 #### Step 2 — Log Likelihood
 
 Il prodotto di tanti numeri piccoli causa problemi numerici (underflow). Soluzione: usiamo il **logaritmo** — che trasforma il prodotto in somma.
 
-$$\log L(W) = \sum_{i=1}^{n} \left[ y_i \cdot \log(\hat{y}_i) + (1 - y_i) \cdot \log(1 - \hat{y}_i) \right]$$
+$$\Large \log L(W) = \sum_{i=1}^{n} \left[ y_i \cdot \log(\hat{y}_i) + (1 - y_i) \cdot \log(1 - \hat{y}_i) \right]$$
 
 > [!NOTE]
 > Il logaritmo è una funzione **monotona crescente**: massimizzare L(W) equivale a massimizzare log L(W). Ma il logaritmo rende i calcoli molto più semplici.
@@ -238,7 +238,7 @@ $$\log L(W) = \sum_{i=1}^{n} \left[ y_i \cdot \log(\hat{y}_i) + (1 - y_i) \cdot 
 
 Nella pratica, preferiamo **minimizzare** una funzione di costo anziché massimizzare la verosimiglianza. Basta cambiare il segno:
 
-$$\text{LogLoss} = -\frac{1}{n} \sum_{i=1}^{n} \left[ y_i \cdot \log(\hat{y}_i) + (1 - y_i) \cdot \log(1 - \hat{y}_i) \right]$$
+$$\Large \text{LogLoss} = -\frac{1}{n} \sum_{i=1}^{n} \left[ y_i \cdot \log(\hat{y}_i) + (1 - y_i) \cdot \log(1 - \hat{y}_i) \right]$$
 
 #### Esempio numerico completo
 
@@ -250,7 +250,7 @@ Supponiamo 3 osservazioni:
 | 2 | 0 | 0.082 | 0·log(0.082) + 1·log(0.918) = **−0.086** |
 | 3 | 1 | 0.750 | 1·log(0.750) + 0·log(0.250) = **−0.288** |
 
-$$\text{LogLoss} = -\frac{1}{3}(-0.033 - 0.086 - 0.288) = -\frac{-0.407}{3} = 0.136$$
+$$\Large \text{LogLoss} = -\frac{1}{3}(-0.033 - 0.086 - 0.288) = -\frac{-0.407}{3} = 0.136$$
 
 **Interpretazione**: più la Log Loss è vicina a 0, migliore è il modello.
 
@@ -306,7 +306,7 @@ Per una nuova osservazione x, i tre modelli restituiscono:
 
 #### Numero di modelli
 
-$$\text{Modelli OvR} = K$$
+$$\Large \text{Modelli OvR} = K$$
 
 dove K è il numero di classi. Con 10 classi → **10 modelli**.
 
@@ -330,7 +330,7 @@ Ogni modello "vota" per una classe. La classe con più voti vince.
 
 #### Numero di modelli
 
-$$\text{Modelli OvO} = \frac{K \times (K - 1)}{2}$$
+$$\Large \text{Modelli OvO} = \frac{K \times (K - 1)}{2}$$
 
 | K (classi) | Modelli OvR | Modelli OvO |
 |---|---|---|
@@ -409,11 +409,11 @@ Useremo questi numeri per tutte le metriche che seguono.
 
 **Definizione**: la percentuale di classificazioni corrette sul totale.
 
-$$\text{Accuracy} = \frac{TP + TN}{TP + TN + FP + FN}$$
+$$\Large \text{Accuracy} = \frac{TP + TN}{TP + TN + FP + FN}$$
 
 #### Calcolo con il nostro esempio
 
-$$\text{Accuracy} = \frac{40 + 45}{40 + 45 + 5 + 10} = \frac{85}{100} = 0.85 = 85\%$$
+$$\Large \text{Accuracy} = \frac{40 + 45}{40 + 45 + 5 + 10} = \frac{85}{100} = 0.85 = 85\%$$
 
 Il modello classifica correttamente l'85% dei pazienti.
 
@@ -426,11 +426,11 @@ Il modello classifica correttamente l'85% dei pazienti.
 
 **Definizione**: delle osservazioni che il modello ha classificato come **positive**, quante lo erano davvero?
 
-$$\text{Precision} = \frac{TP}{TP + FP}$$
+$$\Large \text{Precision} = \frac{TP}{TP + FP}$$
 
 #### Calcolo
 
-$$\text{Precision} = \frac{40}{40 + 5} = \frac{40}{45} = 0.889 = 88.9\%$$
+$$\Large \text{Precision} = \frac{40}{40 + 5} = \frac{40}{45} = 0.889 = 88.9\%$$
 
 **Interpretazione**: quando il modello dice "maligno", ha ragione l'88.9% delle volte.
 
@@ -442,13 +442,13 @@ $$\text{Precision} = \frac{40}{40 + 5} = \frac{40}{45} = 0.889 = 88.9\%$$
 
 **Definizione**: delle osservazioni **realmente positive**, quante sono state individuate dal modello?
 
-$$\text{Recall} = \frac{TP}{TP + FN}$$
+$$\Large \text{Recall} = \frac{TP}{TP + FN}$$
 
 *Detta anche Sensibilità (Sensitivity) o True Positive Rate (TPR).*
 
 #### Calcolo
 
-$$\text{Recall} = \frac{40}{40 + 10} = \frac{40}{50} = 0.80 = 80\%$$
+$$\Large \text{Recall} = \frac{40}{40 + 10} = \frac{40}{50} = 0.80 = 80\%$$
 
 **Interpretazione**: il modello riesce a individuare l'80% dei tumori maligni.
 
@@ -470,11 +470,11 @@ Esiste un **compromesso** tra le due metriche. Abbassando il threshold (soglia):
 
 **Definizione**: delle osservazioni **realmente negative**, quante sono state classificate correttamente come negative?
 
-$$\text{Specificity} = \frac{TN}{TN + FP}$$
+$$\Large \text{Specificity} = \frac{TN}{TN + FP}$$
 
 #### Calcolo
 
-$$\text{Specificity} = \frac{45}{45 + 5} = \frac{45}{50} = 0.90 = 90\%$$
+$$\Large \text{Specificity} = \frac{45}{45 + 5} = \frac{45}{50} = 0.90 = 90\%$$
 
 **Interpretazione**: il modello identifica correttamente il 90% dei tumori benigni.
 
@@ -517,7 +517,7 @@ TPR │  ╭╯
 
 Un unico numero che riassume la curva ROC:
 
-$$\text{AUC} \in [0, 1]$$
+$$\Large \text{AUC} \in [0, 1]$$
 
 | AUC | Qualità del modello |
 |---|---|
@@ -536,11 +536,11 @@ $$\text{AUC} \in [0, 1]$$
 
 **Definizione**: la **media armonica** tra Precision e Recall. Sintetizza entrambe le metriche in un unico valore.
 
-$$F1 = 2 \cdot \frac{\text{Precision} \times \text{Recall}}{\text{Precision} + \text{Recall}}$$
+$$\Large F1 = 2 \cdot \frac{\text{Precision} \times \text{Recall}}{\text{Precision} + \text{Recall}}$$
 
 #### Calcolo
 
-$$F1 = 2 \cdot \frac{0.889 \times 0.80}{0.889 + 0.80} = 2 \cdot \frac{0.711}{1.689} = 2 \cdot 0.421 = 0.842$$
+$$\Large F1 = 2 \cdot \frac{0.889 \times 0.80}{0.889 + 0.80} = 2 \cdot \frac{0.711}{1.689} = 2 \cdot 0.421 = 0.842$$
 
 #### Perché la media armonica e non quella aritmetica?
 
@@ -560,7 +560,7 @@ Se una delle due metriche è molto bassa, la media aritmetica potrebbe comunque 
 
 La **Log Loss** è la funzione di costo della regressione logistica, ma viene usata anche come **metrica di valutazione**.
 
-$$\text{LogLoss} = -\frac{1}{n} \sum_{i=1}^{n} \left[ y_i \cdot \log(\hat{y}_i) + (1 - y_i) \cdot \log(1 - \hat{y}_i) \right]$$
+$$\Large \text{LogLoss} = -\frac{1}{n} \sum_{i=1}^{n} \left[ y_i \cdot \log(\hat{y}_i) + (1 - y_i) \cdot \log(1 - \hat{y}_i) \right]$$
 
 A differenza di Accuracy, Precision e Recall, la Log Loss tiene conto non solo della **correttezza** ma anche della **confidenza** (probabilità) della previsione.
 
