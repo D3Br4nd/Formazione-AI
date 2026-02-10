@@ -79,6 +79,12 @@ Normalizziamo le feature con media 0 e deviazione standard 1 (StandardScaler):
 
 $$\Large z_i = \frac{x_i - \mu}{\sigma}$$
 
+dove:
+- $z_i$ = valore standardizzato della feature per l'osservazione *i*
+- $x_i$ = valore originale della feature
+- $\mu$ = **media** di tutti i valori della feature nel dataset
+- $\sigma$ = **deviazione standard** di tutti i valori della feature nel dataset
+
 | Raggio medio (scaled) | Punti di concavità (scaled) | Diagnosi |
 |---|---|---|
 | 1.097 | 2.532 | maligno |
@@ -162,6 +168,11 @@ Qui entra in gioco la vera protagonista della regressione logistica: la **funzio
 
 $$\Large \sigma(z) = \frac{1}{1 + e^{-z}}$$
 
+dove:
+- $\sigma(z)$ = output della funzione sigmoide (probabilità prevista, tra 0 e 1)
+- $z$ = valore di input (output del modello lineare: $w_1 x_1 + w_2 x_2 + b$)
+- $e$ = costante di Eulero (≈ 2.718)
+
 #### Proprietà fondamentali
 
 | Proprietà | Descrizione |
@@ -192,6 +203,11 @@ $$\Large \sigma(-2.421) = \frac{1}{1 + e^{2.421}} = \frac{1}{1 + 11.257} = \frac
 Di default il threshold è **0.5**:
 
 $$\Large \hat{y} = \begin{cases} 1 \text{ (positivo)} & \text{se } \sigma(z) \geq 0.5 \\ 0 \text{ (negativo)} & \text{se } \sigma(z) < 0.5 \end{cases}$$
+
+dove:
+- $\hat{y}$ = classe prevista dal modello (0 o 1)
+- $\sigma(z)$ = probabilità stimata dalla funzione sigmoide
+- $0.5$ = soglia (threshold) di default
 
 > [!TIP]
 > Il threshold può essere modificato in base al contesto. In campo medico, potremmo abbassarlo a 0.3 per essere più conservativi: meglio un falso allarme che un tumore non diagnosticato.
@@ -225,11 +241,24 @@ Per tutto il dataset (assumendo osservazioni indipendenti):
 
 $$\Large L(W) = \prod_{i=1}^{n} P(y_i | x_i, W)$$
 
+dove:
+- $L(W)$ = likelihood (verosimiglianza) complessiva del modello
+- $\prod$ = produttoria (prodotto di tutti i termini)
+- $n$ = numero totale di osservazioni nel dataset
+- $P(y_i | x_i, W)$ = probabilità dell'osservazione *i* dato il modello
+
 #### Step 2 — Log Likelihood
 
 Il prodotto di tanti numeri piccoli causa problemi numerici (underflow). Soluzione: usiamo il **logaritmo** — che trasforma il prodotto in somma.
 
 $$\Large \log L(W) = \sum_{i=1}^{n} \left[ y_i \cdot \log(\hat{y}_i) + (1 - y_i) \cdot \log(1 - \hat{y}_i) \right]$$
+
+dove:
+- $\log L(W)$ = logaritmo della likelihood
+- $\sum$ = sommatoria su tutte le *n* osservazioni
+- $y_i$ = valore reale della classe (0 o 1) per l'osservazione *i*
+- $\hat{y}_i$ = probabilità prevista dal modello per l'osservazione *i*
+- $\log$ = logaritmo naturale
 
 > [!NOTE]
 > Il logaritmo è una funzione **monotona crescente**: massimizzare L(W) equivale a massimizzare log L(W). Ma il logaritmo rende i calcoli molto più semplici.
@@ -239,6 +268,13 @@ $$\Large \log L(W) = \sum_{i=1}^{n} \left[ y_i \cdot \log(\hat{y}_i) + (1 - y_i)
 Nella pratica, preferiamo **minimizzare** una funzione di costo anziché massimizzare la verosimiglianza. Basta cambiare il segno:
 
 $$\Large \text{LogLoss} = -\frac{1}{n} \sum_{i=1}^{n} \left[ y_i \cdot \log(\hat{y}_i) + (1 - y_i) \cdot \log(1 - \hat{y}_i) \right]$$
+
+dove:
+- $n$ = numero totale di osservazioni
+- $y_i$ = classe reale (0 o 1)
+- $\hat{y}_i$ = probabilità prevista dal modello
+- il segno $-$ trasforma la massimizzazione della likelihood in minimizzazione del costo
+- $\frac{1}{n}$ = media su tutte le osservazioni
 
 #### Esempio numerico completo
 
@@ -332,6 +368,11 @@ Ogni modello "vota" per una classe. La classe con più voti vince.
 
 $$\Large \text{Modelli OvO} = \frac{K \times (K - 1)}{2}$$
 
+dove:
+- $K$ = numero totale di classi nel problema
+- $K - 1$ = le altre classi con cui confrontare ciascuna classe
+- si divide per $2$ perché ogni coppia (A vs B) è uguale a (B vs A)
+
 | K (classi) | Modelli OvR | Modelli OvO |
 |---|---|---|
 | 3 | 3 | 3 |
@@ -411,6 +452,12 @@ Useremo questi numeri per tutte le metriche che seguono.
 
 $$\Large \text{Accuracy} = \frac{TP + TN}{TP + TN + FP + FN}$$
 
+dove:
+- $TP$ = True Positive (positivi classificati correttamente)
+- $TN$ = True Negative (negativi classificati correttamente)
+- $FP$ = False Positive (negativi classificati erroneamente come positivi)
+- $FN$ = False Negative (positivi classificati erroneamente come negativi)
+
 #### Calcolo con il nostro esempio
 
 $$\Large \text{Accuracy} = \frac{40 + 45}{40 + 45 + 5 + 10} = \frac{85}{100} = 0.85 = 85\%$$
@@ -428,6 +475,11 @@ Il modello classifica correttamente l'85% dei pazienti.
 
 $$\Large \text{Precision} = \frac{TP}{TP + FP}$$
 
+dove:
+- $TP$ = True Positive (positivi classificati correttamente)
+- $FP$ = False Positive (negativi classificati erroneamente come positivi)
+- $TP + FP$ = tutte le osservazioni che il modello ha **previsto** come positive
+
 #### Calcolo
 
 $$\Large \text{Precision} = \frac{40}{40 + 5} = \frac{40}{45} = 0.889 = 88.9\%$$
@@ -443,6 +495,11 @@ $$\Large \text{Precision} = \frac{40}{40 + 5} = \frac{40}{45} = 0.889 = 88.9\%$$
 **Definizione**: delle osservazioni **realmente positive**, quante sono state individuate dal modello?
 
 $$\Large \text{Recall} = \frac{TP}{TP + FN}$$
+
+dove:
+- $TP$ = True Positive (positivi classificati correttamente)
+- $FN$ = False Negative (positivi classificati erroneamente come negativi)
+- $TP + FN$ = tutte le osservazioni che sono **realmente** positive
 
 *Detta anche Sensibilità (Sensitivity) o True Positive Rate (TPR).*
 
@@ -471,6 +528,11 @@ Esiste un **compromesso** tra le due metriche. Abbassando il threshold (soglia):
 **Definizione**: delle osservazioni **realmente negative**, quante sono state classificate correttamente come negative?
 
 $$\Large \text{Specificity} = \frac{TN}{TN + FP}$$
+
+dove:
+- $TN$ = True Negative (negativi classificati correttamente)
+- $FP$ = False Positive (negativi classificati erroneamente come positivi)
+- $TN + FP$ = tutte le osservazioni che sono **realmente** negative
 
 #### Calcolo
 
@@ -538,6 +600,11 @@ $$\Large \text{AUC} \in [0, 1]$$
 
 $$\Large F1 = 2 \cdot \frac{\text{Precision} \times \text{Recall}}{\text{Precision} + \text{Recall}}$$
 
+dove:
+- $\text{Precision}$ = percentuale di previsioni positive corrette
+- $\text{Recall}$ = percentuale di positivi reali individuati
+- il fattore $2$ bilancia la formula della media armonica
+
 #### Calcolo
 
 $$\Large F1 = 2 \cdot \frac{0.889 \times 0.80}{0.889 + 0.80} = 2 \cdot \frac{0.711}{1.689} = 2 \cdot 0.421 = 0.842$$
@@ -561,6 +628,12 @@ Se una delle due metriche è molto bassa, la media aritmetica potrebbe comunque 
 La **Log Loss** è la funzione di costo della regressione logistica, ma viene usata anche come **metrica di valutazione**.
 
 $$\Large \text{LogLoss} = -\frac{1}{n} \sum_{i=1}^{n} \left[ y_i \cdot \log(\hat{y}_i) + (1 - y_i) \cdot \log(1 - \hat{y}_i) \right]$$
+
+dove:
+- $n$ = numero totale di osservazioni
+- $y_i$ = classe reale (0 o 1) per l'osservazione *i*
+- $\hat{y}_i$ = probabilità prevista dal modello per l'osservazione *i*
+- $\log$ = logaritmo naturale
 
 A differenza di Accuracy, Precision e Recall, la Log Loss tiene conto non solo della **correttezza** ma anche della **confidenza** (probabilità) della previsione.
 
